@@ -5,6 +5,7 @@ digits_incolumn = [0 for i in range(9)]
 digits_column = 0
 rotated = [[0 for i in range(9)] for j in range(9)]
 same = [[0 for i in range(9)] for j in range(9)]
+missing_line = [0 for i in range(9)]
 
 putin = [ [0,2,0,4,5,6,7,8,9],
           [4,5,7,0,8,0,2,3,6],
@@ -75,5 +76,13 @@ for i in range(9):
 # /Filling part
 
 # Guessing part
+for i in range(9):
+    special = Diff(digits,putin[i])
+    for j in range(len(special)):
+        if special[j-1] == 0:
+            del special[j-1]
+    missing_line[i] = special
 
+print(missing_line)
+            
 
