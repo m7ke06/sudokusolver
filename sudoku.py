@@ -6,18 +6,20 @@ digits_column = 0
 rotated = [[0 for i in range(9)] for j in range(9)]
 same = [[0 for i in range(9)] for j in range(9)]
 missing_line = [0 for i in range(9)]
+missing_column = [0 for i in range(9)]
+zeros = [0 for i in range(9)]
+again = 1
 
-putin = [ [0,2,0,4,5,6,7,8,9],
-          [4,5,7,0,8,0,2,3,6],
-          [6,8,9,2,3,7,0,4,0],
-          [0,0,5,3,6,2,9,7,4],
-          [2,7,4,0,9,0,6,5,3],
-          [3,9,6,5,7,4,8,0,0],
-          [0,4,0,6,1,8,3,9,7],
-          [7,6,1,0,4,0,5,2,8],
-          [9,3,8,7,2,5,0,6,0],]     # input SUDOKU
+putin = [ [7,0,3,6,1,2,0,0,0],
+          [0,0,1,0,0,0,3,0,0],
+          [8,4,2,0,9,0,7,0,6],
+          [0,7,0,0,4,1,5,3,2],
+          [0,0,0,9,2,6,0,0,0],
+          [4,2,8,7,5,0,0,6,0],
+          [2,0,4,0,3,0,8,5,7],
+          [0,0,7,0,0,0,2,0,0],
+          [0,0,0,2,7,8,6,0,3],]     # input SUDOKU
 
-# Filling part
 def Fill(putin, rotated):
     for i in range(9):
         for j in range(9):
@@ -25,64 +27,110 @@ def Fill(putin, rotated):
 
 def Diff(li1, li2): 
     li_dif = [i for i in li1 + li2 if i not in li1 or i not in li2] 
-    return li_dif 
+    return li_dif
 
-while True:
-    
-    for i in range(9):
-        digits_line = 0
-        for j in range(9):
-            if putin[i][j] != 0:
-                digits_line = digits_line + 1
-        digits_inline[i] = digits_line
+def Intersection(lst1, lst2):
+    lst3 =  [value for value in lst1 if value in lst2]
+    return lst3
 
-    for i in range(9):
-        digits_column = 0
-        for j in range(9):
-            if putin[j][i] != 0:
-                digits_column = digits_column + 1
-        digits_incolumn[i] = digits_column
-
-
-    for i in range(9):
-        if digits_inline[i] == 8:
-            special = Diff(digits,putin[i])
-            special.remove(0)
-            special_integer = int(special[0])
+# Filling part
+def Trying():
+    global same
+    while True:
+        
+        for i in range(9):
+            digits_line = 0
             for j in range(9):
-                if putin[i][j] == 0:
-                    putin[i][j] = special_integer
-    Fill(putin,rotated)
+                if putin[i][j] != 0:
+                    digits_line = digits_line + 1
+            digits_inline[i] = digits_line
 
-    for i in range(9):
-        if digits_incolumn[i] == 8:
-            special = Diff(digits,rotated[i])
-            if 0 in special:
+        for i in range(9):
+            digits_column = 0
+            for j in range(9):
+                if putin[j][i] != 0:
+                    digits_column = digits_column + 1
+            digits_incolumn[i] = digits_column
+
+
+        for i in range(9):
+            if digits_inline[i] == 8:
+                special = Diff(digits,putin[i])
                 special.remove(0)
                 special_integer = int(special[0])
                 for j in range(9):
-                    if putin[j][i] == 0:
-                        putin[j][i] = special_integer
+                    if putin[i][j] == 0:
+                        putin[i][j] = special_integer
+        Fill(putin,rotated)
 
-    
-    Fill(putin,rotated)
-    if same == rotated:
-        break
-    
-    same = rotated
+        for i in range(9):
+            if digits_incolumn[i] == 8:
+                special = Diff(digits,rotated[i])
+                if 0 in special:
+                    special.remove(0)
+                    special_integer = int(special[0])
+                    for j in range(9):
+                        if putin[j][i] == 0:
+                            putin[j][i] = special_integer
 
-for i in range(9):
-    print(putin[i])
+        
+        Fill(putin,rotated)
+        if same == rotated:
+            break
+        
+        same = rotated
+Trying()
+# for i in range(9):
+#     print(putin[i])
 # /Filling part
 
 # Guessing part
 for i in range(9):
     special = Diff(digits,putin[i])
+    b = 0
     for j in range(len(special)):
-        if special[j-1] == 0:
-            del special[j-1]
+        if special[b] == 0:
+            del special[b]
+            b -= 1
+        b += 1
     missing_line[i] = special
 
-print(missing_line)
+# print(missing_line)
+
+for i in range(9):
+    special = Diff(digits, rotated[i])
+    b = 0
+    for j in range(len(special)):
+        if special[b] == 0:
+            del special[b]
+            b -= 1
+        b += 1
+    missing_column[i] = special
+# print(missing_column)
+while again > 0:
+    again = 0
+    for i in range(9):
+        for j in range(9):
+            if putin[i][j] == 0:
+                a = missing_line[i]
+                b = missing_column[j]
+                c = Intersection(a,b)
+                if len(c) == 1:
+                    d = c[0]
+                    putin[i][j] = d
+                    Trying()
+    Trying()
+    for i in range(9):
+        for j in range(9):
+            if putin[i][j] == 0:
+                again = 1
+    print('///////////////////////')
+    for i in range(9):
+        print(putin[i])
             
+
+
+    
+
+         
 
