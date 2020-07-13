@@ -3,6 +3,8 @@ digits_inline = [0 for i in range(9)]
 digits_line = 0
 digits_incolumn = [0 for i in range(9)]
 digits_column = 0
+digits_insquare = [0 for i in range(9)]
+digits_square = 0
 rotated = [[0 for i in range(9)] for j in range(9)]
 same = [[0 for i in range(9)] for j in range(9)]
 missing_line = [0 for i in range(9)]
@@ -42,7 +44,7 @@ def Trying():
             digits_line = 0
             for j in range(9):
                 if putin[i][j] != 0:
-                    digits_line = digits_line + 1
+                    digits_line += digits_line
             digits_inline[i] = digits_line
 
         for i in range(9):
@@ -72,9 +74,19 @@ def Trying():
                     for j in range(9):
                         if putin[j][i] == 0:
                             putin[j][i] = special_integer
-
-        
         Fill(putin,rotated)
+        # Numbers in little squares
+        for k in range(3):
+            for l in range(3):
+                digits_square = 0
+                for i in range(3):
+                    for j in range(3):
+                        if putin[i+(k*3)][j+(l*3)] != 0:
+                            digits_square += 1
+                digits_insquare[i] = digits_square
+                print(digits_insquare[i])
+
+
         if same == rotated:
             break
         
