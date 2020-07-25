@@ -5,6 +5,7 @@ digits_incolumn = [0 for i in range(9)]
 digits_column = 0
 digits_insquare = [0 for i in range(9)]
 digits_square = 0
+exact_digits_inSquare = [[0 for i in range(9)] for j in range(9)]
 rotated = [[0 for i in range(9)] for j in range(9)]
 same = [[0 for i in range(9)] for j in range(9)]
 missing_line = [0 for i in range(9)]
@@ -44,7 +45,7 @@ def Trying():
             digits_line = 0
             for j in range(9):
                 if putin[i][j] != 0:
-                    digits_line += digits_line
+                    digits_line = digits_line + 1
             digits_inline[i] = digits_line
 
         for i in range(9):
@@ -63,6 +64,7 @@ def Trying():
                 for j in range(9):
                     if putin[i][j] == 0:
                         putin[i][j] = special_integer
+                        break
         Fill(putin,rotated)
 
         for i in range(9):
@@ -74,6 +76,7 @@ def Trying():
                     for j in range(9):
                         if putin[j][i] == 0:
                             putin[j][i] = special_integer
+                            break
         Fill(putin,rotated)
         # Numbers in little squares
         for k in range(3):
@@ -83,45 +86,54 @@ def Trying():
                     for j in range(3):
                         if putin[i+(k*3)][j+(l*3)] != 0:
                             digits_square += 1
+                        exact_digits_inSquare[l+(k*3)][j+(i*3)] = putin[i+(k*3)][j+(l*3)]
                 digits_insquare[l+(k*3)] = digits_square
-                print(digits_insquare[l+(k*3)])
-                # if digits_insquare[i] == 8:
+                if digits_insquare[l+(k*3)] == 8:
+                    special = Diff(digits, exact_digits_inSquare[l+(k*3)])
+                    special_integer = int(special[0])
+                    for i in range(3):
+                        for j in range(3):
+                            if putin[i+(k*3)][j+(l*3)] == 0:
+                                putin[i+(k*3)][j+(l*3)] = special_integer
+        
+        Fill(putin, rotated)
                     
-
-
         if same == rotated:
             break
         
         same = rotated
+
+def Missing():
+    # What's missing in lines
+    for i in range(9):
+        special = Diff(digits,putin[i])
+        b = 0
+        for _ in range(len(special)):
+            if special[b] == 0:
+                del special[b]
+                b -= 1
+            b += 1
+        missing_line[i] = special
+    # What's missing in columns
+    for i in range(9):
+        special = Diff(digits, rotated[i])
+        b = 0
+        for _ in range(len(special)):
+            if special[b] == 0:
+                del special[b]
+                b -= 1
+            b += 1
+        missing_column[i] = special
+
 Trying()
-# for i in range(9):
-#     print(putin[i])
+
 # /Filling part
 
 # Guessing part
-for i in range(9):
-    special = Diff(digits,putin[i])
-    b = 0
-    for j in range(len(special)):
-        if special[b] == 0:
-            del special[b]
-            b -= 1
-        b += 1
-    missing_line[i] = special
+Missing()
 
-# print(missing_line)
-
-for i in range(9):
-    special = Diff(digits, rotated[i])
-    b = 0
-    for j in range(len(special)):
-        if special[b] == 0:
-            del special[b]
-            b -= 1
-        b += 1
-    missing_column[i] = special
-# print(missing_column)
-while again > 0:
+# while again > 0:
+for _ in range(100):
     again = 0
     for i in range(9):
         for j in range(9):
@@ -141,6 +153,11 @@ while again > 0:
     print('///////////////////////')
     for i in range(9):
         print(putin[i])
+
+Missing()
+
+print(missing_line)
+print(missing_column)
             
 
 
