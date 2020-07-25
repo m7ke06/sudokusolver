@@ -83,8 +83,10 @@ def Trying():
                     for j in range(3):
                         if putin[i+(k*3)][j+(l*3)] != 0:
                             digits_square += 1
-                digits_insquare[i] = digits_square
-                print(digits_insquare[i])
+                digits_insquare[l+(k*3)] = digits_square
+                print(digits_insquare[l+(k*3)])
+                # if digits_insquare[i] == 8:
+                    
 
 
         if same == rotated:
