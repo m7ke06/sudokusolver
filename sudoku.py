@@ -11,7 +11,6 @@ same = [[0 for i in range(9)] for j in range(9)]
 missing_line = [0 for i in range(9)]
 missing_line_without = [0 for i in range(9)]
 missing_column = [0 for i in range(9)]
-zeros = [0 for i in range(9)]
 again = 1
 counter1 = 0
 
