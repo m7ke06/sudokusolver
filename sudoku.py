@@ -6,6 +6,7 @@ digits_column = 0
 digits_insquare = [0 for i in range(9)]
 digits_square = 0
 exact_digits_inSquare = [[0 for i in range(9)] for j in range(9)]
+missing_digits_inSquare = [[0 for i in range(9)] for j in range(9)]
 rotated = [[0 for i in range(9)] for j in range(9)]
 same = [[0 for i in range(9)] for j in range(9)]
 missing_line = [0 for i in range(9)]
@@ -13,16 +14,20 @@ missing_line_without = [0 for i in range(9)]
 missing_column = [0 for i in range(9)]
 again = 1
 counter1 = 0
+position = [ [1,2,3,4,5,6,7,8,9],
+             [0,0,0,0,0,0,0,0,0], ]
+possible = [ [1,2,3,4,5,6,7,8,9],
+             [0,0,0,0,0,0,0,0,0], ]
 
-putin = [ [0,2,0,0,8,0,0,3,0],
-          [3,0,0,0,7,0,0,0,0],
-          [0,0,0,0,0,0,1,9,0],
-          [0,0,6,2,4,0,0,0,0],
-          [0,0,0,0,0,0,0,0,1],
-          [2,0,8,0,3,6,0,0,0],
-          [4,0,0,0,6,0,0,0,0],
-          [5,0,2,4,0,0,0,0,0],
-          [0,6,0,0,9,7,8,0,4],]     # input SUDOKU
+putin = [ [0,7,0,0,0,4,1,0,0],
+          [0,2,0,5,0,0,0,0,9],
+          [8,0,9,0,0,0,0,0,6],
+          [0,0,0,0,7,1,0,0,8],
+          [1,0,0,4,0,6,0,0,0],
+          [0,0,0,8,2,0,0,0,0],
+          [3,0,0,0,0,0,5,0,2],
+          [9,0,0,0,0,3,0,6,0],
+          [0,0,5,7,0,0,0,4,0], ]     # input SUDOKU
 
 def Fill(putin, rotated):
     for i in range(9):
@@ -95,6 +100,13 @@ def Trying():
                         for j in range(3):
                             if putin[i+(k*3)][j+(l*3)] == 0:
                                 putin[i+(k*3)][j+(l*3)] = special_integer
+        for i in range(9):
+            missing_digits_inSquare[i] = Diff(digits, exact_digits_inSquare[i])
+            for _ in range(len(missing_digits_inSquare)):
+                if 0 in missing_digits_inSquare[i]:
+                    missing_digits_inSquare[i].remove(0)
+            print(missing_digits_inSquare[i])
+        print("/////////")
         
         Fill(putin, rotated)
                     
@@ -172,6 +184,27 @@ while again > 0:
 
     Trying()
     Missing()
+
+    for k in range(3):
+        for l in range(3):
+            for i in range(3):
+                for j in range(3):
+                    if putin[i+(k*3)][j+(l*3)] == 0:
+                        for m in range(len(missing_digits_inSquare[l+(3*k)])):
+                            if (missing_digits_inSquare[l+(3*k)][m] in missing_line[i+(k*3)]) and (missing_digits_inSquare[l+(3*k)][m] in missing_column[j+(l*3)]):
+                                possible[1][missing_digits_inSquare[l+(3*k)][m]-1] = possible[1][missing_digits_inSquare[l+(3*k)][m]-1] + 1
+                                position[1][missing_digits_inSquare[l+(3*k)][m]-1] = j + (i*3)    
+                            else:
+                                possible = possible
+            
+            for i in range(9):
+                if possible[1][i] == 1:
+                    putin[(position[1][i] // 3)+(k*3)][(position[1][i] % 3) + (l*3)] = possible[0][i]
+            possible = [ [1,2,3,4,5,6,7,8,9],
+                         [0,0,0,0,0,0,0,0,0], ]
+    Trying()
+    Missing()
+
     for i in range(9):
         for j in range(9):
             if putin[i][j] == 0:
