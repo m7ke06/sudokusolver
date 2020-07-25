@@ -9,19 +9,21 @@ exact_digits_inSquare = [[0 for i in range(9)] for j in range(9)]
 rotated = [[0 for i in range(9)] for j in range(9)]
 same = [[0 for i in range(9)] for j in range(9)]
 missing_line = [0 for i in range(9)]
+missing_line_without = [0 for i in range(9)]
 missing_column = [0 for i in range(9)]
 zeros = [0 for i in range(9)]
 again = 1
+counter1 = 0
 
-putin = [ [7,0,3,6,1,2,0,0,0],
-          [0,0,1,0,0,0,3,0,0],
-          [8,4,2,0,9,0,7,0,6],
-          [0,7,0,0,4,1,5,3,2],
-          [0,0,0,9,2,6,0,0,0],
-          [4,2,8,7,5,0,0,6,0],
-          [2,0,4,0,3,0,8,5,7],
-          [0,0,7,0,0,0,2,0,0],
-          [0,0,0,2,7,8,6,0,3],]     # input SUDOKU
+putin = [ [0,2,0,0,8,0,0,3,0],
+          [3,0,0,0,7,0,0,0,0],
+          [0,0,0,0,0,0,1,9,0],
+          [0,0,6,2,4,0,0,0,0],
+          [0,0,0,0,0,0,0,0,1],
+          [2,0,8,0,3,6,0,0,0],
+          [4,0,0,0,6,0,0,0,0],
+          [5,0,2,4,0,0,0,0,0],
+          [0,6,0,0,9,7,8,0,4],]     # input SUDOKU
 
 def Fill(putin, rotated):
     for i in range(9):
@@ -36,7 +38,6 @@ def Intersection(lst1, lst2):
     lst3 =  [value for value in lst1 if value in lst2]
     return lst3
 
-# Filling part
 def Trying():
     global same
     while True:
@@ -100,7 +101,6 @@ def Trying():
                     
         if same == rotated:
             break
-        
         same = rotated
 
 def Missing():
@@ -126,14 +126,9 @@ def Missing():
         missing_column[i] = special
 
 Trying()
-
-# /Filling part
-
-# Guessing part
 Missing()
 
-# while again > 0:
-for _ in range(100):
+while again > 0:
     again = 0
     for i in range(9):
         for j in range(9):
@@ -141,27 +136,48 @@ for _ in range(100):
                 a = missing_line[i]
                 b = missing_column[j]
                 c = Intersection(a,b)
+                counter1 = 0
+                for _ in range(len(c)):
+                    if (c[counter1] in exact_digits_inSquare[0]) and (i <= 2 and j <= 2):
+                        c.remove(c[counter1])
+                        counter1 = counter1 - 1
+                    elif (c[counter1] in exact_digits_inSquare[1]) and (i <= 2 and j > 2 and j <= 5):
+                        c.remove(c[counter1])
+                        counter1 = counter1 - 1
+                    elif (c[counter1] in exact_digits_inSquare[2]) and (i <= 2 and j > 5):
+                        c.remove(c[counter1])
+                        counter1 = counter1 - 1
+                    elif (c[counter1] in exact_digits_inSquare[3]) and (i > 2 and i <= 5 and j <= 2):
+                        c.remove(c[counter1])
+                        counter1 = counter1 - 1
+                    elif (c[counter1] in exact_digits_inSquare[4]) and (i > 2 and i <= 5 and j > 2 and j <= 5):
+                        c.remove(c[counter1])
+                        counter1 = counter1 - 1
+                    elif (c[counter1] in exact_digits_inSquare[5]) and (i > 2 and i <= 5 and j > 5):
+                        c.remove(c[counter1])
+                        counter1 = counter1 - 1
+                    elif (c[counter1] in exact_digits_inSquare[6]) and (i > 5 and j <= 2):
+                        c.remove(c[counter1])
+                        counter1 = counter1 - 1
+                    elif (c[counter1] in exact_digits_inSquare[7]) and (i > 5 and j > 2 and j <= 5):
+                        c.remove(c[counter1])
+                        counter1 = counter1 - 1
+                    elif (c[counter1] in exact_digits_inSquare[8]) and (i > 5 and j > 5):
+                        c.remove(c[counter1])
+                        counter1 = counter1 - 1
+                    counter1 = counter1 + 1
+
                 if len(c) == 1:
                     d = c[0]
                     putin[i][j] = d
-                    Trying()
+
     Trying()
+    Missing()
     for i in range(9):
         for j in range(9):
             if putin[i][j] == 0:
                 again = 1
-    print('///////////////////////')
+                
     for i in range(9):
         print(putin[i])
-
-Missing()
-
-print(missing_line)
-print(missing_column)
-            
-
-
-    
-
-         
-
+    print("////////////////////////////////////")
