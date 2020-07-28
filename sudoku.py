@@ -261,7 +261,7 @@ while again > 0:
                 for l in range(9):
                     for m in range(9):
                         # if len(Diff(digits, missing_line[l])) != 9 or len(Diff(digits, missing_column[m])) != 9:
-                        if ((1 and 2 and 3 and 4 and 5 and 6 and 7 and 8 and 9) not in putin2[l]) and ((1 and 2 and 3 and 4 and 5 and 6 and 7 and 8 and 9) not in rotated2[l]) and ((1 and 2 and 3 and 4 and 5 and 6 and 7 and 8 and 9) not in exact_digits_inSquare[(m // 3)+((l // 3)*3)]):
+                        if ((1 and 2 and 3 and 4 and 5 and 6 and 7 and 8 and 9) not in putin2[l]) or ((1 and 2 and 3 and 4 and 5 and 6 and 7 and 8 and 9) not in rotated2[l]) or ((1 and 2 and 3 and 4 and 5 and 6 and 7 and 8 and 9) not in exact_digits_inSquare[(m // 3)+((l // 3)*3)]):
                             again = again + 1
                             break
                     else:
