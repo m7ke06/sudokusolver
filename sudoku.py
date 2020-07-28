@@ -147,7 +147,7 @@ def Missing(sudoku, rotate):
 def Logic(sudoku, rotate):
     global possible, found
     # while again > 0:
-    for _ in range(200):
+    for _ in range(5):
         again = 0
         for i in range(9):
             for j in range(9):
@@ -219,11 +219,6 @@ def Logic(sudoku, rotate):
             for j in range(9):
                 if sudoku[i][j] == 0:
                     again = 1
-                    
-        # for i in range(9):
-        #     print(sudoku[i])
-        # print("////////////////////////////////////")
-
 
 Trying(putin,rotated)
 Missing(putin, rotated)
@@ -253,7 +248,6 @@ while again > 0:
                 a = missing_line[i]
                 b = missing_column[j]
                 c = Intersection(a,b)
-                # for k in range(len(c)):
                 if len(c) != 0:
                     putin2[i][j] = c[random.randint(0, len(c)-1)]
                 Missing(putin2, rotated2)
@@ -269,14 +263,6 @@ while again > 0:
         print(putin2[i])
     print("/////////////")
                            
-                # if len (c) == 0:
-                #     pass
-                # else:
-                #     putin2[i][j] = c[random.randint(0, len(c)-1)]
-                #     Missing(putin2, rotated2)
-                #     Trying(putin2,rotated2)
-
-
 for i in range(9):
     print(putin2[i])
 print("+++++6+6++++++")
