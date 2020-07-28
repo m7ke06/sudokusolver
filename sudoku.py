@@ -74,7 +74,7 @@ def Trying(sudoku, rotate):
                 special.remove(0)
                 special_integer = int(special[0])
                 for j in range(9):
-                    if sudoku[i][j] == 0:
+                    if sudoku[i][j] == 0 and special_integer in missing_column[j]:
                         sudoku[i][j] = special_integer
                         found = found + 1
                         break
@@ -87,7 +87,7 @@ def Trying(sudoku, rotate):
                     special.remove(0)
                     special_integer = int(special[0])
                     for j in range(9):
-                        if sudoku[j][i] == 0:
+                        if sudoku[j][i] == 0 and special_integer in missing_line[j]:
                             sudoku[j][i] = special_integer
                             found = found + 1
                             break
@@ -245,6 +245,7 @@ while again > 0:
     putin2 = copy.deepcopy(putin)
     rotated2 = copy.deepcopy(rotated)
     again = 0
+    Missing(putin2,rotated2)
 
     for i in range(9):
         for j in range(9):
@@ -253,7 +254,7 @@ while again > 0:
                 b = missing_column[j]
                 c = Intersection(a,b)
                 # for k in range(len(c)):
-                if len (c) != 0:
+                if len(c) != 0:
                     putin2[i][j] = c[random.randint(0, len(c)-1)]
                 Missing(putin2, rotated2)
                 Trying(putin2,rotated2)
