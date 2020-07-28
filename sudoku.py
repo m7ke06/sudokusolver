@@ -24,15 +24,15 @@ position = [ [1,2,3,4,5,6,7,8,9],
 possible = [ [1,2,3,4,5,6,7,8,9],
              [0,0,0,0,0,0,0,0,0], ]
 
-putin = [ [0,0,0,0,8,0,9,0,6],
-          [0,0,6,0,0,0,0,0,0],
-          [5,0,0,0,6,0,0,7,0],
-          [0,1,8,0,0,7,0,0,4],
-          [0,0,2,8,0,3,7,0,0],
-          [0,0,0,0,0,0,8,0,9],
-          [0,6,0,0,0,1,4,0,0],
-          [0,0,0,2,0,6,5,0,7],
-          [0,9,0,0,0,8,0,6,0], ]
+putin = [ [0,1,7,0,0,0,0,9,0],
+          [0,5,3,0,8,0,0,0,1],
+          [8,0,0,0,0,0,0,0,0],
+          [0,0,0,4,9,0,1,0,3],
+          [0,0,0,5,0,8,0,0,0],
+          [4,0,8,0,1,3,0,0,0],
+          [0,0,0,0,0,0,0,0,8],
+          [5,0,0,0,7,0,2,6,0],
+          [0,6,0,0,0,0,3,4,0], ]
                # input SUDOKU
 putin2 = [[0 for i in range(9)] for i in range(9)]
 
@@ -257,18 +257,19 @@ while again > 0:
                     putin2[i][j] = c[random.randint(0, len(c)-1)]
                 Missing(putin2, rotated2)
                 Trying(putin2,rotated2)
-
+                Logic(putin2, rotated2)
                 for l in range(9):
                     for m in range(9):
-                        if len(Diff(digits, missing_line[l])) != 9 or len(Diff(digits, missing_column[m])) != 9:
+                        # if len(Diff(digits, missing_line[l])) != 9 or len(Diff(digits, missing_column[m])) != 9:
+                        if ((1 and 2 and 3 and 4 and 5 and 6 and 7 and 8 and 9) not in putin2[l]) and ((1 and 2 and 3 and 4 and 5 and 6 and 7 and 8 and 9) not in rotated2[l]) and ((1 and 2 and 3 and 4 and 5 and 6 and 7 and 8 and 9) not in exact_digits_inSquare[(m // 3)+((l // 3)*3)]):
                             again = again + 1
                             break
                     else:
+                        again = 0
                         continue
+                        
                     break
-                    # else:
-                    #     continue
-                    # break
+
     counter1 = counter1 + 1
     for i in range(9):
         print(putin2[i])
@@ -284,4 +285,4 @@ while again > 0:
 
 for i in range(9):
     print(putin2[i])
-print("/////////////")
+print("+++++6+6++++++")
