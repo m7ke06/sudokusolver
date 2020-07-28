@@ -18,20 +18,21 @@ missing_line_without = [0 for i in range(9)]
 missing_column = [0 for i in range(9)]
 again = 1
 counter1 = 0
+found = 0
 position = [ [1,2,3,4,5,6,7,8,9],
              [0,0,0,0,0,0,0,0,0], ]
 possible = [ [1,2,3,4,5,6,7,8,9],
              [0,0,0,0,0,0,0,0,0], ]
 
-putin = [ [0,0,6,0,9,0,2,0,0],
-          [0,0,0,7,0,2,0,0,0],
-          [0,9,0,5,0,8,0,7,0],
-          [9,0,0,0,3,0,0,0,6],
-          [7,5,0,0,0,0,0,1,9],
-          [1,0,0,0,4,0,0,0,5],
-          [0,1,0,3,0,9,0,8,0],
-          [0,0,0,2,0,1,0,0,0],
-          [0,0,9,0,8,0,1,0,0], ]
+putin = [ [0,0,0,0,8,0,9,0,6],
+          [0,0,6,0,0,0,0,0,0],
+          [5,0,0,0,6,0,0,7,0],
+          [0,1,8,0,0,7,0,0,4],
+          [0,0,2,8,0,3,7,0,0],
+          [0,0,0,0,0,0,8,0,9],
+          [0,6,0,0,0,1,4,0,0],
+          [0,0,0,2,0,6,5,0,7],
+          [0,9,0,0,0,8,0,6,0], ]
                # input SUDOKU
 putin2 = [[0 for i in range(9)] for i in range(9)]
 
@@ -49,7 +50,7 @@ def Intersection(lst1, lst2):
     return lst3
 
 def Trying(sudoku, rotate):
-    global same
+    global same, found
     while True:
         
         for i in range(9):
@@ -75,6 +76,7 @@ def Trying(sudoku, rotate):
                 for j in range(9):
                     if sudoku[i][j] == 0:
                         sudoku[i][j] = special_integer
+                        found = found + 1
                         break
         Fill(sudoku,rotate)
 
@@ -87,6 +89,7 @@ def Trying(sudoku, rotate):
                     for j in range(9):
                         if sudoku[j][i] == 0:
                             sudoku[j][i] = special_integer
+                            found = found + 1
                             break
         Fill(sudoku,rotate)
         # Numbers in little squares
@@ -97,7 +100,7 @@ def Trying(sudoku, rotate):
                     for j in range(3):
                         if sudoku[i+(k*3)][j+(l*3)] != 0:
                             digits_square += 1
-                        exact_digits_inSquare[l+(k*3)][j+(i*3)] = putin[i+(k*3)][j+(l*3)]
+                        exact_digits_inSquare[l+(k*3)][j+(i*3)] = sudoku[i+(k*3)][j+(l*3)]
                 digits_insquare[l+(k*3)] = digits_square
                 if digits_insquare[l+(k*3)] == 8:
                     special = Diff(digits, exact_digits_inSquare[l+(k*3)])
@@ -106,6 +109,7 @@ def Trying(sudoku, rotate):
                         for j in range(3):
                             if sudoku[i+(k*3)][j+(l*3)] == 0:
                                 sudoku[i+(k*3)][j+(l*3)] = special_integer
+                                found = found + 1
         for i in range(9):
             missing_digits_inSquare[i] = Diff(digits, exact_digits_inSquare[i])
             for _ in range(len(missing_digits_inSquare)):
@@ -141,7 +145,7 @@ def Missing(sudoku, rotate):
         missing_column[i] = special
 
 def Logic(sudoku, rotate):
-    global possible
+    global possible, found
     # while again > 0:
     for _ in range(200):
         again = 0
@@ -184,7 +188,8 @@ def Logic(sudoku, rotate):
 
                     if len(c) == 1:
                         d = c[0]
-                        putin[i][j] = d
+                        sudoku[i][j] = d
+                        found = found + 1
 
         Trying(sudoku,rotate)
         Missing(sudoku, rotate)
@@ -204,6 +209,7 @@ def Logic(sudoku, rotate):
                 for i in range(9):
                     if possible[1][i] == 1:
                         sudoku[(position[1][i] // 3)+(k*3)][(position[1][i] % 3) + (l*3)] = possible[0][i]
+                        found = found + 1
                 possible = [ [1,2,3,4,5,6,7,8,9],
                             [0,0,0,0,0,0,0,0,0], ]
         Trying(sudoku,rotate)
@@ -223,6 +229,17 @@ Trying(putin,rotated)
 Missing(putin, rotated)
 Logic(putin, rotated)
 
+file1 = open("result.txt","a")
+for i in range(9):
+    file1.write(str(putin[i]))
+    file1.write("\n")
+file1.write("\n")
+text = "The program found " + str(found) + " numbers." 
+file1.write(text)
+file1.write("\n")
+file1.write("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\")
+file1.write("\n")
+file1.close()
 
 while again > 0:
     putin2 = copy.deepcopy(putin)
@@ -235,23 +252,27 @@ while again > 0:
                 a = missing_line[i]
                 b = missing_column[j]
                 c = Intersection(a,b)
-                for k in range(len(c)):
-                    putin2[i][j] = c[k + counter1]
-                    Missing(putin2, rotated2)
-                    Trying(putin2,rotated2)
-                    Logic(putin2,rotated2)
-                    for l in range(9):
-                        for m in range(9):
-                            if len(Diff(digits, missing_line[l])) != 9 or len(Diff(digits, missing_column[m])) != 9:
-                                again = again + 1
-                                break
-                        else:
-                            continue
-                        break
+                # for k in range(len(c)):
+                if len (c) != 0:
+                    putin2[i][j] = c[random.randint(0, len(c)-1)]
+                Missing(putin2, rotated2)
+                Trying(putin2,rotated2)
+
+                for l in range(9):
+                    for m in range(9):
+                        if len(Diff(digits, missing_line[l])) != 9 or len(Diff(digits, missing_column[m])) != 9:
+                            again = again + 1
+                            break
                     else:
                         continue
                     break
-    # counter1 = counter1 + 1
+                    # else:
+                    #     continue
+                    # break
+    counter1 = counter1 + 1
+    for i in range(9):
+        print(putin2[i])
+    print("/////////////")
                            
                 # if len (c) == 0:
                 #     pass
@@ -261,4 +282,6 @@ while again > 0:
                 #     Trying(putin2,rotated2)
 
 
-print(putin2)
+for i in range(9):
+    print(putin2[i])
+print("/////////////")
