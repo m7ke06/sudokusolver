@@ -220,9 +220,9 @@ def Logic(sudoku, rotate):
                 if sudoku[i][j] == 0:
                     again = 1
                     
-        for i in range(9):
-            print(sudoku[i])
-        print("////////////////////////////////////")
+        # for i in range(9):
+        #     print(sudoku[i])
+        # print("////////////////////////////////////")
 
 
 Trying(putin,rotated)
@@ -259,18 +259,11 @@ while again > 0:
                 Missing(putin2, rotated2)
                 Trying(putin2,rotated2)
                 Logic(putin2, rotated2)
-                for l in range(9):
-                    for m in range(9):
-                        # if len(Diff(digits, missing_line[l])) != 9 or len(Diff(digits, missing_column[m])) != 9:
-                        if ((1 and 2 and 3 and 4 and 5 and 6 and 7 and 8 and 9) not in putin2[l]) or ((1 and 2 and 3 and 4 and 5 and 6 and 7 and 8 and 9) not in rotated2[l]) or ((1 and 2 and 3 and 4 and 5 and 6 and 7 and 8 and 9) not in exact_digits_inSquare[(m // 3)+((l // 3)*3)]):
-                            again = again + 1
-                            break
-                    else:
-                        again = 0
-                        continue
-                        
-                    break
-
+                
+    for l in range(9):
+        if 1 not in putin2[l] or 2 not in putin2[l] or 3 not in putin2[l] or 4 not in putin2[l] or 5 not in putin2[l] or 6 not in putin2[l] or 7 not in putin2[l] or 8 not in putin2[l] or 1 not in rotated2[l] or 2 not in rotated2[l] or 3 not in rotated2[l] or 4 not in rotated2[l] or 5 not in rotated2[l] or 6 not in rotated2[l] or 7 not in rotated2[l] or 8 not in rotated2[l] or 9 not in rotated2[l] or 1 not in exact_digits_inSquare[l] or 2 not in exact_digits_inSquare[l] or 3 not in exact_digits_inSquare[l] or 4 not in exact_digits_inSquare[l] or 5 not in exact_digits_inSquare[l] or 6 not in exact_digits_inSquare[l] or 7 not in exact_digits_inSquare[l] or 8 not in exact_digits_inSquare[l] or 9 not in exact_digits_inSquare[l]:
+            again = again + 1
+            break
     counter1 = counter1 + 1
     for i in range(9):
         print(putin2[i])
@@ -287,3 +280,19 @@ while again > 0:
 for i in range(9):
     print(putin2[i])
 print("+++++6+6++++++")
+
+file1 = open("result.txt","a")
+file1.write("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\")
+file1.write("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\")
+file1.write("\n")
+for i in range(9):
+    file1.write(str(putin2[i]))
+    file1.write("\n")
+file1.write("\n")
+text = "This is the result" 
+file1.write(text)
+file1.write("\n")
+file1.write("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\")
+file1.write("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\")
+file1.write("\n")
+file1.close()
